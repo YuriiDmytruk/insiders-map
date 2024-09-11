@@ -17,7 +17,7 @@ const initialState: MapState = {
     longitudeDelta: 0.0421,
   },
   places: [],
-  radius: 500,
+  radius: 5000,
   selectedPlace: null,
 };
 
