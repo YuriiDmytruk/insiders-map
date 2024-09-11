@@ -2,10 +2,15 @@
 
 #import <React/RCTBundleURLProvider.h>
 
+#import <GoogleMaps/GoogleMaps.h>
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
+  [GMSServices provideAPIKey:@"AIzaSyDo2zSU4FTTxh9LahbYjedkIDBGd5t122c"];
+
   self.moduleName = @"insidersMap";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
