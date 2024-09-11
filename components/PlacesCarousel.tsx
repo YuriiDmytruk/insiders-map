@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {
   Text,
   View,
@@ -37,6 +37,21 @@ const PlacesCarousel = () => {
 
   const [shownPlace, setShownPlace] = useState(reorderedPlaces[0]);
 
+  useEffect(() => {
+    const changeSelected = (place: Place) => {
+      dispatch(
+        setRegion({
+          latitude: place.geometry.location.lat,
+          longitude: place.geometry.location.lng,
+          latitudeDelta: ZOOM_LEVEL.latitudeDelta,
+          longitudeDelta: ZOOM_LEVEL.longitudeDelta,
+        }),
+      );
+    };
+
+    changeSelected(shownPlace);
+  },[shownPlace, dispatch]);
+
   const handleItemClick = (place: Place) => {
     dispatch(
       setRegion({
@@ -47,7 +62,6 @@ const PlacesCarousel = () => {
       }),
     );
     dispatch(setSelectedPlace(place));
-    setIsPanelActive(true);
   };
 
   const closePanel = () => {
