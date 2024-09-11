@@ -1,50 +1,82 @@
-import React, { useMemo } from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
-import { Carousel } from 'react-native-basic-carousel';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../redux/store';
-import { setRegion, setSelectedPlace } from '../redux/slices/mapSlice';
-import { API_KEY } from '../redux/placesApi';
-import { Place } from '../types';
-import { ZOOM_LEVEL } from '../constants';
+import React, {useState, useMemo} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {Carousel} from 'react-native-basic-carousel';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from '../redux/store';
+import {setRegion, setSelectedPlace} from '../redux/slices/mapSlice';
+import {API_KEY} from '../redux/placesApi';
+import {Place} from '../types';
+import {ZOOM_LEVEL} from '../constants';
+import SwipeBar from './SwipeBar';
+import MoreInfoPanel from './MoreInfoPanel'; // Import the MoreInfoPanel component
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const PlacesCarousel = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { places, selectedPlace } = useSelector((state: RootState) => state.map);
+  const {places, selectedPlace} = useSelector((state: RootState) => state.map);
 
-  // Memoize reordered places list
+  const [isPanelActive, setIsPanelActive] = useState(false);
+
   const reorderedPlaces = useMemo(() => {
     if (!selectedPlace) {
       return places;
     }
-    // Move selected place to the beginning of the list
-    return [selectedPlace, ...places.filter(place => place.place_id !== selectedPlace.place_id)];
+    return [
+      selectedPlace,
+      ...places.filter(place => place.place_id !== selectedPlace.place_id),
+    ];
   }, [places, selectedPlace]);
 
+  const [shownPlace, setShownPlace] = useState(reorderedPlaces[0]);
+
   const handleItemClick = (place: Place) => {
-    // Update region
-    dispatch(setRegion({
-      latitude: place.geometry.location.lat,
-      longitude: place.geometry.location.lng,
-      latitudeDelta: ZOOM_LEVEL.latitudeDelta,
-      longitudeDelta: ZOOM_LEVEL.longitudeDelta,
-    }));
-    // Set the selected place
+    dispatch(
+      setRegion({
+        latitude: place.geometry.location.lat,
+        longitude: place.geometry.location.lng,
+        latitudeDelta: ZOOM_LEVEL.latitudeDelta,
+        longitudeDelta: ZOOM_LEVEL.longitudeDelta,
+      }),
+    );
     dispatch(setSelectedPlace(place));
+    setIsPanelActive(true);
+  };
+
+  const closePanel = () => {
+    setIsPanelActive(false);
+  };
+
+  const onSwipeUp = () => {
+    setIsPanelActive(true); // Open the panel on swipe up
+  };
+
+  const onSwipeDown = () => {
+    setIsPanelActive(false); // Close the panel on swipe down
   };
 
   return (
     <View style={styles.container}>
       <Carousel
-        key={selectedPlace?.place_id || 'carousel'} // Change key when selectedPlace changes
+        key={selectedPlace?.place_id || 'carousel'}
         data={reorderedPlaces}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.item} onPress={() => handleItemClick(item)}>
+        getCurrentIndex={index => setShownPlace(reorderedPlaces[index])}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => handleItemClick(item)}>
             {item.photos && item.photos.length > 0 ? (
               <Image
-                source={{ uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos[0].photo_reference}&key=${API_KEY}` }}
+                source={{
+                  uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos[0].photo_reference}&key=${API_KEY}`,
+                }}
                 style={styles.image}
               />
             ) : (
@@ -60,25 +92,33 @@ const PlacesCarousel = () => {
         )}
         itemWidth={width}
       />
+
+      {isPanelActive && (
+        <MoreInfoPanel place={shownPlace} onClose={closePanel} />
+      )}
+
+      {!isPanelActive && (
+        <SwipeBar onSwipeUp={onSwipeUp} onSwipeDown={onSwipeDown} />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: height * 0.25, // Set the height to 25% of the screen height
+    height: height * 0.25,
     width: width,
   },
   item: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%', // Make item height match container height
+    height: '100%',
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#fff',
     margin: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
