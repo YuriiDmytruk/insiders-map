@@ -11,8 +11,8 @@ interface MapState {
 
 const initialState: MapState = {
   region: {
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: 49.842957,
+    longitude: 24.031111,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   },
