@@ -86,7 +86,6 @@ const PlacesCarousel = () => {
             )}
             <View style={styles.infoContainer}>
               <Text style={styles.placeName}>{item.name}</Text>
-              <Text style={styles.placeDetails}>{item.vicinity}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -145,6 +144,7 @@ const styles = StyleSheet.create({
   },
   placeName: {
     fontSize: 18,
+    textAlign: 'center',
     fontWeight: 'bold',
     color: '#333',
   },

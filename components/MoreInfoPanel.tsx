@@ -51,20 +51,26 @@ const MoreInfoPanel: React.FC<MoreInfoPanelProps> = ({place, onClose}) => {
     <View style={styles.panel}>
       <Text style={styles.panelTitle}>{place.name}</Text>
 
-      <Carousel
-        data={place.photos}
-        renderItem={({item}) => (
-          <Image
-            source={{
-              uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photo_reference}&key=${API_KEY}`,
-            }}
-            style={styles.image}
-          />
-        )}
-        autoplay
-        pagination
-        itemWidth={width}
-      />
+      {place.photos && place.photos.length > 0 ? (
+        <Carousel
+          data={place.photos}
+          renderItem={({item}) => (
+            <Image
+              source={{
+                uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photo_reference}&key=${API_KEY}`,
+              }}
+              style={styles.image}
+            />
+          )}
+          autoplay
+          pagination
+          itemWidth={width}
+        />
+      ) : (
+        <View style={styles.noImageContainer}>
+          <Text style={styles.noImageText}>No Images Available</Text>
+        </View>
+      )}
 
       <View style={styles.container}>
         <View style={styles.ratingContainer}>
@@ -72,7 +78,6 @@ const MoreInfoPanel: React.FC<MoreInfoPanelProps> = ({place, onClose}) => {
         </View>
 
         <Text style={styles.panelText}>Address: {place.vicinity}</Text>
-
         <Text style={styles.panelText}>Price Level: {place.price_level}</Text>
         <Text style={styles.panelText}>
           User Ratings Total: {place.user_ratings_total}
@@ -141,6 +146,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 10,
+  },
+  noImageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  noImageText: {
+    fontSize: 16,
+    color: '#888',
   },
 });
 
