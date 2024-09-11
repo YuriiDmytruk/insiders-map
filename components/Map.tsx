@@ -13,10 +13,9 @@ import {useFetchNearbyPlacesQuery} from '../redux/placesApi';
 import {Place} from '../types';
 import {ZOOM_LEVEL} from '../constants';
 
-// Import images statically
 const pinSelected = require('../assets/pin-selected.png');
 const pin = require('../assets/pin.png');
-const searchIcon = require('../assets/search-icon.png'); // Add this line for search icon
+const searchIcon = require('../assets/search-icon.png');
 
 const Map = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -120,23 +119,16 @@ const Map = () => {
         })}
       </MapView>
       <View style={styles.controlContainer}>
-        <TouchableOpacity
-          style={styles.zoomButton}
-          onPress={zoomIn}>
+        <TouchableOpacity style={styles.zoomButton} onPress={zoomIn}>
           <Text style={styles.zoomButtonText}>+</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.zoomButton}
-          onPress={zoomOut}>
+        <TouchableOpacity style={styles.zoomButton} onPress={zoomOut}>
           <Text style={styles.zoomButtonText}>-</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.searchButton}
           onPress={onSearchButtonPress}>
-          <Image
-            source={searchIcon}
-            style={styles.searchIcon}
-          />
+          <Image source={searchIcon} style={styles.searchIcon} />
         </TouchableOpacity>
       </View>
     </View>

@@ -12,7 +12,6 @@ import {Place} from '../types';
 import {Carousel} from 'react-native-basic-carousel';
 import {API_KEY} from '../redux/placesApi';
 
-// Import star images
 const starEmpty: ImageSourcePropType = require('../assets/star-empty.png');
 const starFull: ImageSourcePropType = require('../assets/star-full.png');
 
@@ -21,7 +20,6 @@ interface MoreInfoPanelProps {
   onClose: () => void;
 }
 
-// Function to render star rating
 const renderRatingStars = (rating: number) => {
   const fullStars = Math.floor(rating);
   const halfStars = rating % 1 >= 0.5 ? 1 : 0;
@@ -82,7 +80,6 @@ const MoreInfoPanel: React.FC<MoreInfoPanelProps> = ({place, onClose}) => {
         <Text style={styles.panelText}>
           User Ratings Total: {place.user_ratings_total}
         </Text>
-        {/* Add more information about the place here */}
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={styles.closeButtonText}>Close</Text>
         </TouchableOpacity>

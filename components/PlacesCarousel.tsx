@@ -15,7 +15,7 @@ import {API_KEY} from '../redux/placesApi';
 import {Place} from '../types';
 import {ZOOM_LEVEL} from '../constants';
 import SwipeBar from './SwipeBar';
-import MoreInfoPanel from './MoreInfoPanel'; // Import the MoreInfoPanel component
+import MoreInfoPanel from './MoreInfoPanel';
 
 const {width, height} = Dimensions.get('window');
 
@@ -55,11 +55,11 @@ const PlacesCarousel = () => {
   };
 
   const onSwipeUp = () => {
-    setIsPanelActive(true); // Open the panel on swipe up
+    setIsPanelActive(true);
   };
 
   const onSwipeDown = () => {
-    setIsPanelActive(false); // Close the panel on swipe down
+    setIsPanelActive(false);
   };
 
   return (
